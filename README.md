@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chatbot con Gemini AI
 
-## Getting Started
+Asistente virtual desarrollado con Next.js 16 y Google Gemini AI.
 
-First, run the development server:
+## Características
 
-```bash
+- 💬 Interfaz de chat moderna y responsiva
+- 🤖 Integración con Google Gemini 2.5 Flash (modelo gratuito)
+- 📝 Historial de conversación
+- ⚡ Next.js 16 con App Router
+- 🎨 Tailwind CSS 4 para estilos
+
+## Configuración
+
+### 1. Instalar dependencias
+
+\`\`\`bash
+npm install
+\`\`\`
+
+### 2. Configurar la API Key de Gemini
+
+Crea un archivo `.env.local` en la raíz del proyecto:
+
+\`\`\`env
+GEMINI_API_KEY=tu_api_key_aqui
+\`\`\`
+
+Para obtener tu API Key:
+1. Visita [Google AI Studio](https://aistudio.google.com/apikey)
+2. Crea o selecciona un proyecto
+3. Genera una nueva API Key
+4. Copia la clave y pégala en `.env.local`
+
+### 3. Ejecutar en desarrollo
+
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tecnologías
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: Next.js 16
+- **React**: 19.2
+- **TypeScript**: 5
+- **Estilos**: Tailwind CSS 4
+- **IA**: Google Gemini API (@google/generative-ai)
 
-## Learn More
+## Estructura del Proyecto
 
-To learn more about Next.js, take a look at the following resources:
+\`\`\`
+chatbot/
+├── app/
+│   ├── api/
+│   │   └── chat/
+│   │       └── route.ts      # Endpoint de la API
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx               # Interfaz del chat
+├── .env.local                 # Variables de entorno (no incluido)
+├── .gitignore
+├── package.json
+└── README.md
+\`\`\`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Despliegue
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Vercel (Recomendado)
 
-## Deploy on Vercel
+1. Sube el proyecto a GitHub
+2. Importa el repositorio en [Vercel](https://vercel.com)
+3. Agrega la variable de entorno `GEMINI_API_KEY`
+4. Despliega
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Otros servicios
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Asegúrate de configurar la variable de entorno `GEMINI_API_KEY` en tu plataforma de hosting.
+
+## Licencia
+
+MIT
