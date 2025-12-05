@@ -41,7 +41,7 @@ export function ModelSelector({
             <optgroup key={provider} label={provider}>
               {models.map((model) => (
                 <option key={model.id} value={model.id}>
-                  {model.name} {model.free && '(Gratis)'} - {model.description}
+                  {model.name} {model.free} - {model.description}
                 </option>
               ))}
             </optgroup>
