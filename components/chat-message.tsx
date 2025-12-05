@@ -15,15 +15,15 @@ export function ChatMessage({ message }: ChatMessageProps) {
         isUser ? 'bg-transparent' : 'bg-gray-50 dark:bg-gray-800/50'
       )}
     >
-      <div className="max-w-3xl mx-auto px-4 py-6 flex gap-4">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6 flex gap-2 sm:gap-3 md:gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
           {isUser ? (
-            <div className="w-8 h-8 rounded-full bg-gray-900 text-white dark:bg-white dark:text-gray-900 flex items-center justify-center font-medium text-sm border border-transparent dark:border-gray-300">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-gray-900 text-white dark:bg-white dark:text-gray-900 flex items-center justify-center font-medium text-xs sm:text-sm border border-transparent dark:border-gray-300">
               U
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 flex items-center justify-center p-1.5 shadow-md">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-linear-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 flex items-center justify-center p-1 sm:p-1.5 shadow-md">
               <img
                 src="/icons/robot.svg"
                 alt="Robot Assistant"
@@ -35,19 +35,19 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
         {/* Message content */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+          <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+            <span className="font-semibold text-xs sm:text-sm text-gray-900 dark:text-gray-100">
               {isUser ? 'Tú' : 'Asistente'}
             </span>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
               {message.timestamp.toLocaleTimeString('es-ES', {
                 hour: '2-digit',
                 minute: '2-digit',
               })}
             </span>
           </div>
-          <div className="prose prose-sm dark:prose-invert max-w-none">
-            <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
+          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none">
+            <p className="text-sm sm:text-base text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
               {message.content}
             </p>
           </div>
