@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Habilita el modo oscuro por clase (.dark) en lugar de seguir solo la preferencia del sistema */
+@custom-variant dark (&:is(.dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -17,6 +20,16 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+:root.light {
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
 body {
