@@ -23,10 +23,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
               U
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-full bg-green-600 dark:bg-green-500 flex items-center justify-center text-white">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 flex items-center justify-center p-1.5 shadow-md">
+              <img
+                src="/icons/robot.svg"
+                alt="Robot Assistant"
+                className="w-full h-full"
+              />
             </div>
           )}
         </div>

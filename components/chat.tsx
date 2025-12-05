@@ -7,6 +7,7 @@ import { ChatInput } from './chat-input';
 import { ModelSelector } from './model-selector';
 import { DEFAULT_MODEL_ID } from '@/lib/models';
 import { useTheme } from './theme-provider';
+import { LottieAnimation } from './lottie-animation';
 
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -121,19 +122,15 @@ export function Chat() {
             <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 flex flex-col gap-6 justify-end">
               {messages.length === 0 && (
                 <div className="text-center text-gray-500 dark:text-gray-400 mt-12">
-                  <svg
-                    className="w-20 h-20 mx-auto mb-4 text-gray-300 dark:text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                  <div className="flex justify-center mb-4">
+                    <LottieAnimation
+                      src="/animations/animation.lottie"
+                      width={200}
+                      height={200}
+                      loop={true}
+                      autoplay={true}
                     />
-                  </svg>
+                  </div>
                   <p className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
                     Asistente Virtual
                   </p>
