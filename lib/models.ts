@@ -16,7 +16,7 @@ export const AI_MODELS: AIModel[] = [
     provider: 'Google',
     apiKeyEnv: 'GEMINI_API_KEY',
     free: true,
-    description: '15 req/min - Rápido y eficiente',
+    description: 'Rápido y confiable',
   },
 /*   {
     id: 'gemini-1.5-pro',
@@ -35,7 +35,7 @@ export const AI_MODELS: AIModel[] = [
     apiKeyEnv: 'GROQ_API_KEY',
     endpoint: 'https://api.groq.com/openai/v1/chat/completions',
     free: true,
-    description: '30 req/min - Ultra rápido',
+    description: 'Responde al instante',
   }, 
   {
     id: 'llama-3.1-8b-instant',
@@ -44,7 +44,7 @@ export const AI_MODELS: AIModel[] = [
     apiKeyEnv: 'GROQ_API_KEY',
     endpoint: 'https://api.groq.com/openai/v1/chat/completions',
     free: true,
-    description: '30 req/min - Instantáneo',
+    description: 'Muy veloz y ligero',
   },
 
   
@@ -96,7 +96,7 @@ export const AI_MODELS: AIModel[] = [
     apiKeyEnv: 'DEEPSEEK_API_KEY',
     endpoint: 'https://api.deepseek.com/v1/chat/completions',
     free: true,
-    description: 'Gratis - V3.2 ultra potente',
+    description: 'Chat rápido',
   },
   {
     id: 'deepseek-reasoner',
@@ -105,7 +105,7 @@ export const AI_MODELS: AIModel[] = [
     apiKeyEnv: 'DEEPSEEK_API_KEY',
     endpoint: 'https://api.deepseek.com/v1/chat/completions',
     free: true,
-    description: 'Gratis - Modo razonamiento',
+    description: 'Ideal para razonar',
   },
 
 /*   // OpenAI (solo con crédito inicial)
