@@ -19,11 +19,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
         {/* Avatar */}
         <div className="flex-shrink-0">
           {isUser ? (
-            <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-gray-900 text-white dark:bg-white dark:text-gray-900 flex items-center justify-center font-medium text-xs sm:text-sm border border-transparent dark:border-gray-300">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-indigo-600 text-white dark:bg-indigo-500 flex items-center justify-center font-medium text-xs sm:text-sm shadow-sm">
               U
             </div>
           ) : (
-            <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-linear-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 flex items-center justify-center p-1 sm:p-1.5 shadow-md">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 dark:from-indigo-500 dark:to-indigo-700 flex items-center justify-center p-1 sm:p-1.5 shadow-md">
               <img
                 src="/icons/robot.svg"
                 alt="Robot Assistant"

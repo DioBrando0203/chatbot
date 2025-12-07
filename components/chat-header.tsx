@@ -5,7 +5,7 @@ export function ChatHeader() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Asistente Virtual con IA
         </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">Powered by Google Gemini</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Powered by OpenAI</p>
       </div>
     </header>
   );

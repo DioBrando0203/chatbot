@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Asistente Virtual con IA",
-  description: "Asistente virtual inteligente powered by Google Gemini",
+  description: "Asistente virtual inteligente powered by OpenAI",
 };
 
 export default function RootLayout({
@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 dark:bg-gray-900`}
       >
         <Providers>
           {children}

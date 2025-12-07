@@ -9,25 +9,27 @@ export interface AIModel {
 }
 
 export const AI_MODELS: AIModel[] = [
-  // Google Gemini
+  // OpenAI
   {
-    id: 'gemini-2.5-flash',
-    name: 'Gemini 2.5 Flash',
-    provider: 'Google',
-    apiKeyEnv: 'GEMINI_API_KEY',
-    free: true,
-    description: 'Rápido y confiable',
+    id: 'gpt-4o-mini',
+    name: 'GPT-4o mini',
+    provider: 'OpenAI',
+    apiKeyEnv: 'OPENAI_API_KEY',
+    endpoint: 'https://api.openai.com/v1/chat/completions',
+    free: false,
+    description: 'Rapido y economico',
   },
-/*   {
-    id: 'gemini-1.5-pro',
-    name: 'Gemini 1.5 Pro',
-    provider: 'Google',
-    apiKeyEnv: 'GEMINI_API_KEY',
-    free: true,
-    description: '15 req/min - Más potente',
-  }, */
-  
-  // Groq (Ultra rápido)
+  {
+    id: 'gpt-4o',
+    name: 'GPT-4o',
+    provider: 'OpenAI',
+    apiKeyEnv: 'OPENAI_API_KEY',
+    endpoint: 'https://api.openai.com/v1/chat/completions',
+    free: false,
+    description: 'Mejor calidad',
+  },
+
+  // Groq (ultra rapido)
   {
     id: 'llama-3.3-70b-versatile',
     name: 'Llama 3.3 70B',
@@ -36,7 +38,7 @@ export const AI_MODELS: AIModel[] = [
     endpoint: 'https://api.groq.com/openai/v1/chat/completions',
     free: true,
     description: 'Responde al instante',
-  }, 
+  },
   {
     id: 'llama-3.1-8b-instant',
     name: 'Llama 3.1 8B',
@@ -47,48 +49,7 @@ export const AI_MODELS: AIModel[] = [
     description: 'Muy veloz y ligero',
   },
 
-  
-  // Together AI
-/*   {
-    id: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo',
-    name: 'Llama 3.1 70B (Together)',
-    provider: 'Together AI',
-    apiKeyEnv: 'TOGETHER_API_KEY',
-    endpoint: 'https://api.together.xyz/v1/chat/completions',
-    free: true,
-    description: '$25 crédito gratis',
-  },
-  {
-    id: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-    name: 'Mixtral 8x7B (Together)',
-    provider: 'Together AI',
-    apiKeyEnv: 'TOGETHER_API_KEY',
-    endpoint: 'https://api.together.xyz/v1/chat/completions',
-    free: true,
-    description: '$25 crédito gratis',
-  }, */
-  
-  // Hugging Face
-/*   {
-    id: 'meta-llama/Llama-3.2-3B-Instruct',
-    name: 'Llama 3.2 3B',
-    provider: 'Hugging Face',
-    apiKeyEnv: 'HUGGINGFACE_API_KEY',
-    endpoint: 'https://router.huggingface.co/models',
-    free: true,
-    description: 'Gratis - Aprobado ✅',
-  },
-  {
-    id: 'Qwen/Qwen2.5-7B-Instruct',
-    name: 'Qwen 2.5 7B',
-    provider: 'Hugging Face',
-    apiKeyEnv: 'HUGGINGFACE_API_KEY',
-    endpoint: 'https://router.huggingface.co/models',
-    free: true,
-    description: 'Gratis - Muy bueno',
-  },
- */
-  // DeepSeek (Gratis)
+  // DeepSeek (gratis)
   {
     id: 'deepseek-chat',
     name: 'DeepSeek Chat',
@@ -96,7 +57,7 @@ export const AI_MODELS: AIModel[] = [
     apiKeyEnv: 'DEEPSEEK_API_KEY',
     endpoint: 'https://api.deepseek.com/v1/chat/completions',
     free: true,
-    description: 'Chat rápido',
+    description: 'Chat rapido',
   },
   {
     id: 'deepseek-reasoner',
@@ -108,19 +69,48 @@ export const AI_MODELS: AIModel[] = [
     description: 'Ideal para razonar',
   },
 
-/*   // OpenAI (solo con crédito inicial)
+  // Together AI
+/*  {
+    id: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo',
+    name: 'Llama 3.1 70B (Together)',
+    provider: 'Together AI',
+    apiKeyEnv: 'TOGETHER_API_KEY',
+    endpoint: 'https://api.together.xyz/v1/chat/completions',
+    free: true,
+    description: '$25 credito gratis',
+  },
   {
-    id: 'gpt-3.5-turbo',
-    name: 'GPT-3.5 Turbo',
-    provider: 'OpenAI',
-    apiKeyEnv: 'OPENAI_API_KEY',
-    endpoint: 'https://api.openai.com/v1/chat/completions',
-    free: false,
-    description: '$5 crédito inicial',
+    id: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+    name: 'Mixtral 8x7B (Together)',
+    provider: 'Together AI',
+    apiKeyEnv: 'TOGETHER_API_KEY',
+    endpoint: 'https://api.together.xyz/v1/chat/completions',
+    free: true,
+    description: '$25 credito gratis',
+  }, */
+
+  // Hugging Face
+/*  {
+    id: 'meta-llama/Llama-3.2-3B-Instruct',
+    name: 'Llama 3.2 3B',
+    provider: 'Hugging Face',
+    apiKeyEnv: 'HUGGINGFACE_API_KEY',
+    endpoint: 'https://router.huggingface.co/models',
+    free: true,
+    description: 'Gratis - aprobado',
+  },
+  {
+    id: 'Qwen/Qwen2.5-7B-Instruct',
+    name: 'Qwen 2.5 7B',
+    provider: 'Hugging Face',
+    apiKeyEnv: 'HUGGINGFACE_API_KEY',
+    endpoint: 'https://router.huggingface.co/models',
+    free: true,
+    description: 'Gratis - muy bueno',
   }, */
 ];
 
-export const DEFAULT_MODEL_ID = 'gemini-2.5-flash';
+export const DEFAULT_MODEL_ID = 'gpt-4o-mini';
 
 export function getModelById(id: string): AIModel | undefined {
   return AI_MODELS.find((model) => model.id === id);

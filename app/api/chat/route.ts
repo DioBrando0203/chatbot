@@ -1,37 +1,12 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
-import { getModelById } from '@/lib/models';
-
-// Inicializar Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+import { DEFAULT_MODEL_ID, getModelById } from '@/lib/models';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
 
-// Función para manejar Gemini
-async function handleGemini(modelId: string, message: string, history: Message[]) {
-  const model = genAI.getGenerativeModel({ model: modelId });
-
-  const chatHistory = history?.map((msg) => ({
-    role: msg.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: msg.content }],
-  })) || [];
-
-  const chat = model.startChat({
-    history: chatHistory,
-    generationConfig: {
-      maxOutputTokens: 2000,
-      temperature: 0.7,
-    },
-  });
-
-  const result = await chat.sendMessage(message);
-  return result.response.text();
-}
-
-// Función para manejar Groq, Together AI, OpenAI (formato compatible con OpenAI)
+// Manejo generico para APIs compatibles con el formato de OpenAI
 async function handleOpenAICompatible(
   endpoint: string,
   apiKey: string,
@@ -50,12 +25,12 @@ async function handleOpenAICompatible(
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       model: modelId,
-      messages: messages,
+      messages,
       temperature: 0.7,
       max_tokens: 2000,
     }),
@@ -70,17 +45,16 @@ async function handleOpenAICompatible(
   return data.choices[0].message.content;
 }
 
-// Función para manejar Hugging Face
+// Handler especifico para Hugging Face
 async function handleHuggingFace(modelId: string, message: string, history: Message[]) {
   const apiKey = process.env.HUGGINGFACE_API_KEY;
   if (!apiKey) {
     throw new Error('HUGGINGFACE_API_KEY no configurada');
   }
 
-  // Construir prompt con el historial completo
-  const conversationHistory = history.map((msg) =>
-    `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
-  ).join('\n');
+  const conversationHistory = history
+    .map((msg) => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
+    .join('\n');
 
   const fullPrompt = conversationHistory
     ? `${conversationHistory}\nUser: ${message}\nAssistant:`
@@ -89,7 +63,7 @@ async function handleHuggingFace(modelId: string, message: string, history: Mess
   const response = await fetch(`https://api-inference.huggingface.co/models/${modelId}`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -109,7 +83,6 @@ async function handleHuggingFace(modelId: string, message: string, history: Mess
 
   const data = await response.json();
 
-  // Manejar diferentes formatos de respuesta
   let generatedText = '';
 
   if (Array.isArray(data) && data[0]?.generated_text) {
@@ -122,14 +95,17 @@ async function handleHuggingFace(modelId: string, message: string, history: Mess
     throw new Error('Formato de respuesta inesperado de Hugging Face');
   }
 
-  // Limpiar el prompt de la respuesta si está incluido
   const cleanedText = generatedText.replace(fullPrompt, '').trim();
   return cleanedText || generatedText;
 }
 
 export async function POST(request: Request) {
   try {
-    const { message, history, modelId = 'gemini-2.5-flash' } = await request.json();
+    const {
+      message,
+      history = [],
+      modelId = DEFAULT_MODEL_ID,
+    } = await request.json();
 
     const modelConfig = getModelById(modelId);
 
@@ -142,88 +118,25 @@ export async function POST(request: Request) {
 
     let responseText: string;
 
-    // Manejar según el proveedor
-    if (modelConfig.provider === 'Google') {
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        return NextResponse.json(
-          { success: false, error: 'GEMINI_API_KEY no configurada en variables de entorno' },
-          { status: 500 }
-        );
-      }
-      responseText = await handleGemini(modelId, message, history);
-    }
-    else if (modelConfig.provider === 'Groq') {
-      const apiKey = process.env.GROQ_API_KEY;
-      if (!apiKey) {
-        return NextResponse.json(
-          { success: false, error: 'GROQ_API_KEY no configurada. Obtén tu clave en https://console.groq.com/' },
-          { status: 500 }
-        );
-      }
-      responseText = await handleOpenAICompatible(
-        modelConfig.endpoint!,
-        apiKey,
-        modelId,
-        message,
-        history
-      );
-    }
-    else if (modelConfig.provider === 'Together AI') {
-      const apiKey = process.env.TOGETHER_API_KEY;
-      if (!apiKey) {
-        return NextResponse.json(
-          { success: false, error: 'TOGETHER_API_KEY no configurada. Obtén tu clave en https://api.together.xyz/' },
-          { status: 500 }
-        );
-      }
-      responseText = await handleOpenAICompatible(
-        modelConfig.endpoint!,
-        apiKey,
-        modelId,
-        message,
-        history
-      );
-    }
-    else if (modelConfig.provider === 'DeepSeek') {
-      const apiKey = process.env.DEEPSEEK_API_KEY;
-      if (!apiKey) {
-        return NextResponse.json(
-          { success: false, error: 'DEEPSEEK_API_KEY no configurada. Obtén tu clave en https://platform.deepseek.com/' },
-          { status: 500 }
-        );
-      }
-      responseText = await handleOpenAICompatible(
-        modelConfig.endpoint!,
-        apiKey,
-        modelId,
-        message,
-        history
-      );
-    }
-    else if (modelConfig.provider === 'OpenAI') {
-      const apiKey = process.env.OPENAI_API_KEY;
-      if (!apiKey) {
-        return NextResponse.json(
-          { success: false, error: 'OPENAI_API_KEY no configurada. Obtén tu clave en https://platform.openai.com/' },
-          { status: 500 }
-        );
-      }
-      responseText = await handleOpenAICompatible(
-        modelConfig.endpoint!,
-        apiKey,
-        modelId,
-        message,
-        history
-      );
-    }
-    else if (modelConfig.provider === 'Hugging Face') {
+    if (modelConfig.provider === 'Hugging Face') {
       responseText = await handleHuggingFace(modelId, message, history);
-    }
-    else {
-      return NextResponse.json(
-        { success: false, error: `Proveedor ${modelConfig.provider} no soportado` },
-        { status: 400 }
+    } else {
+      const apiKey = process.env[modelConfig.apiKeyEnv as keyof NodeJS.ProcessEnv];
+      if (!apiKey) {
+        return NextResponse.json(
+          { success: false, error: `${modelConfig.apiKeyEnv} no configurada en variables de entorno` },
+          { status: 500 }
+        );
+      }
+
+      const endpoint = modelConfig.endpoint || 'https://api.openai.com/v1/chat/completions';
+
+      responseText = await handleOpenAICompatible(
+        endpoint,
+        apiKey,
+        modelId,
+        message,
+        history
       );
     }
 
