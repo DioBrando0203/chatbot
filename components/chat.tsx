@@ -84,10 +84,10 @@ export function Chat() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
-      <div className="flex-1 w-full flex justify-center px-4 py-6">
-        <div className="w-full max-w-4xl flex flex-col gap-4">
+      <div className="flex-1 w-full flex justify-center px-4 py-6 overflow-hidden">
+        <div className="w-full max-w-4xl flex flex-col gap-4 h-full">
           {/* Selector de modelo */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 shrink-0">
             <ModelSelector
               selectedModel={selectedModel}
               onModelChange={setSelectedModel}
@@ -95,8 +95,8 @@ export function Chat() {
           </div>
 
           {/* Chat container */}
-          <div className="flex-1 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
-            <div className="h-full overflow-y-auto px-4 sm:px-6 py-6 flex flex-col gap-6">
+          <div className="flex-1 min-h-0 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+            <div className="h-full overflow-y-auto px-4 sm:px-6 py-6 flex flex-col gap-6 scroll-smooth">
               {messages.length === 0 && (
                 <div className="text-center text-gray-500 dark:text-gray-400 mt-12">
                   <div className="flex justify-center mb-4">
@@ -109,7 +109,7 @@ export function Chat() {
                     />
                   </div>
                   <p className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                    Asistente Virtual
+                    ¡Hola! ¿En qué puedo ayudarte hoy? 
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     Escribe un mensaje para comenzar

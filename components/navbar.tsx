@@ -12,7 +12,7 @@ export function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex space-x-8">
             <Link href="/" className="flex items-center text-xl font-bold text-indigo-600 dark:text-indigo-400">
-              Asistente Virtual
+              Chatbot Inteligente - Chamilo CTA
             </Link>
           </div>
           <div className="flex items-center">

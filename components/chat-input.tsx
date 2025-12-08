@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 interface ChatInputProps {
   input: string;
   isLoading: boolean;
@@ -13,23 +15,34 @@ export function ChatInput({
   onSubmit,
   onKeyDown,
 }: ChatInputProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-ajustar la altura del textarea para evitar scroll
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    textarea.style.height = 'auto';
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 240)}px`;
+  }, [input]);
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 px-4 py-4">
       <div className="relative flex items-center">
         <textarea
+          ref={textareaRef}
           value={input}
           onChange={(e) => onInputChange(e.target.value)}
           onKeyDown={onKeyDown}
           placeholder="Escribe un mensaje..."
           disabled={isLoading}
           rows={1}
-          className="flex-1 resize-none rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 pr-12 text-sm text-gray-800 dark:text-gray-200 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 max-h-32 overflow-y-auto"
-          style={{ minHeight: '44px' }}
+          className="flex-1 resize-none rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 pr-12 text-sm text-gray-800 dark:text-gray-200 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 overflow-hidden"
+          style={{ minHeight: '44px', maxHeight: '240px' }}
         />
         <button
           onClick={onSubmit}
           disabled={isLoading || !input.trim()}
-          className="absolute right-2 p-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="absolute right-2 p-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors z-10"
           aria-label="Enviar mensaje"
         >
           {isLoading ? (
@@ -44,7 +57,7 @@ export function ChatInput({
         </button>
       </div>
       <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-        Presiona Enter para enviar, Shift + Enter para nueva línea
+        Presiona Enter para enviar, Shift + Enter para nueva linea
       </p>
     </div>
   );

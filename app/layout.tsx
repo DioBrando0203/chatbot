@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Asistente Virtual con IA",
+  title: "Chatbot Inteligente - Chamilo CTA",
   description: "Asistente virtual inteligente powered by OpenAI",
 };
 

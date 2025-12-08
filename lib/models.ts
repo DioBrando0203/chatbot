@@ -17,7 +17,7 @@ export const AI_MODELS: AIModel[] = [
     apiKeyEnv: 'OPENAI_API_KEY',
     endpoint: 'https://api.openai.com/v1/chat/completions',
     free: false,
-    description: 'Rapido y economico',
+    description: 'Rapido',
   },
   {
     id: 'gpt-4o',
@@ -26,7 +26,7 @@ export const AI_MODELS: AIModel[] = [
     apiKeyEnv: 'OPENAI_API_KEY',
     endpoint: 'https://api.openai.com/v1/chat/completions',
     free: false,
-    description: 'Mejor calidad',
+    description: 'Mejores respuestas ',
   },
 
   // Groq (ultra rapido)
@@ -110,7 +110,7 @@ export const AI_MODELS: AIModel[] = [
   }, */
 ];
 
-export const DEFAULT_MODEL_ID = 'gpt-4o-mini';
+export const DEFAULT_MODEL_ID = 'gpt-4o';
 
 export function getModelById(id: string): AIModel | undefined {
   return AI_MODELS.find((model) => model.id === id);
