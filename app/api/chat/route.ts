@@ -1,10 +1,48 @@
 import { NextResponse } from 'next/server';
 import { DEFAULT_MODEL_ID, getModelById } from '@/lib/models';
+import type { ContextMaterial } from '@/types';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
+
+const MAX_CONTEXT_PER_FILE = 8000;
+const MAX_TOTAL_CONTEXT = 24000;
+
+const ensureTxtExtension = (name: string) =>
+  name.toLowerCase().endsWith('.txt') ? name : `${name}.txt`;
+
+const normalizeContext = (context?: ContextMaterial[]): ContextMaterial[] => {
+  if (!Array.isArray(context)) return [];
+
+  let total = 0;
+  const sanitized: ContextMaterial[] = [];
+
+  for (const item of context) {
+    if (!item?.name || !item?.content) continue;
+    const safeName = ensureTxtExtension(String(item.name));
+    const trimmedContent = String(item.content).slice(0, MAX_CONTEXT_PER_FILE);
+
+    if (total + trimmedContent.length > MAX_TOTAL_CONTEXT) break;
+
+    sanitized.push({ name: safeName, content: trimmedContent });
+    total += trimmedContent.length;
+  }
+
+  return sanitized;
+};
+
+const buildContextMessage = (context?: ContextMaterial[]): string => {
+  const sanitized = normalizeContext(context);
+  if (!sanitized.length) return '';
+
+  const details = sanitized
+    .map((item) => `Archivo: ${item.name}\n${item.content}`)
+    .join('\n\n');
+
+  return `Contexto proveniente del bucket (texto plano). Si alguna parte no es relevante, indícalo claramente antes de responder.\n${details}`;
+};
 
 // Manejo generico para APIs compatibles con el formato de OpenAI
 async function handleOpenAICompatible(
@@ -12,9 +50,11 @@ async function handleOpenAICompatible(
   apiKey: string,
   modelId: string,
   message: string,
-  history: Message[]
+  history: Message[],
+  contextMessage?: string
 ) {
   const messages = [
+    ...(contextMessage ? [{ role: 'system', content: contextMessage }] : []),
     ...history.map((msg) => ({
       role: msg.role,
       content: msg.content,
@@ -46,7 +86,12 @@ async function handleOpenAICompatible(
 }
 
 // Handler especifico para Hugging Face
-async function handleHuggingFace(modelId: string, message: string, history: Message[]) {
+async function handleHuggingFace(
+  modelId: string,
+  message: string,
+  history: Message[],
+  contextMessage?: string
+) {
   const apiKey = process.env.HUGGINGFACE_API_KEY;
   if (!apiKey) {
     throw new Error('HUGGINGFACE_API_KEY no configurada');
@@ -56,9 +101,13 @@ async function handleHuggingFace(modelId: string, message: string, history: Mess
     .map((msg) => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
     .join('\n');
 
-  const fullPrompt = conversationHistory
-    ? `${conversationHistory}\nUser: ${message}\nAssistant:`
-    : `User: ${message}\nAssistant:`;
+  const promptSections = [
+    contextMessage ? `Contexto:\n${contextMessage}` : '',
+    conversationHistory,
+    `User: ${message}\nAssistant:`,
+  ].filter(Boolean);
+
+  const fullPrompt = promptSections.join('\n\n');
 
   const response = await fetch(`https://api-inference.huggingface.co/models/${modelId}`, {
     method: 'POST',
@@ -105,6 +154,7 @@ export async function POST(request: Request) {
       message,
       history = [],
       modelId = DEFAULT_MODEL_ID,
+      context = [],
     } = await request.json();
 
     const modelConfig = getModelById(modelId);
@@ -116,10 +166,18 @@ export async function POST(request: Request) {
       );
     }
 
+    const contextMessage = buildContextMessage(context);
+
+    const normalizedHistory: Message[] = Array.isArray(history)
+      ? history
+          .filter((msg: any) => msg?.role && msg?.content)
+          .map((msg: any) => ({ role: msg.role, content: msg.content }))
+      : [];
+
     let responseText: string;
 
     if (modelConfig.provider === 'Hugging Face') {
-      responseText = await handleHuggingFace(modelId, message, history);
+      responseText = await handleHuggingFace(modelId, message, normalizedHistory, contextMessage);
     } else {
       const apiKey = process.env[modelConfig.apiKeyEnv as keyof NodeJS.ProcessEnv];
       if (!apiKey) {
@@ -136,7 +194,8 @@ export async function POST(request: Request) {
         apiKey,
         modelId,
         message,
-        history
+        normalizedHistory,
+        contextMessage
       );
     }
 
