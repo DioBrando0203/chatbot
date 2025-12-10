@@ -16,9 +16,10 @@ const resolvePath = (request: NextRequest, params?: { path?: string[] }) => {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params?: { path?: string[] } }
+  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
 ) {
-  const path = resolvePath(request, params);
+  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const path = resolvePath(request, resolved);
   const search = request.nextUrl.searchParams.toString();
 
   if (!path) {
@@ -57,9 +58,10 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params?: { path?: string[] } }
+  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
 ) {
-  const path = resolvePath(request, params);
+  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const path = resolvePath(request, resolved);
   if (!path) {
     return NextResponse.json(
       { success: false, error: 'Ruta de proxy invalida' },
@@ -105,9 +107,10 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params?: { path?: string[] } }
+  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
 ) {
-  const path = resolvePath(request, params);
+  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const path = resolvePath(request, resolved);
   if (!path) {
     return NextResponse.json(
       { success: false, error: 'Ruta de proxy invalida' },
@@ -149,9 +152,10 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params?: { path?: string[] } }
+  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
 ) {
-  const path = resolvePath(request, params);
+  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const path = resolvePath(request, resolved);
   if (!path) {
     return NextResponse.json(
       { success: false, error: 'Ruta de proxy invalida' },

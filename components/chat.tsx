@@ -8,6 +8,7 @@ import { ModelSelector } from './model-selector';
 import { DEFAULT_MODEL_ID } from '@/lib/models';
 import { LottieAnimation } from './lottie-animation';
 import { TopicsSidebar } from './topics-sidebar';
+import { MaterialsManager } from './materials-manager';
 import { fetchTopicsList, fetchTopicsWithContent } from '@/lib/topics';
 
 const ensureTxtExtension = (name: string) => (name.toLowerCase().endsWith('.txt') ? name : `${name}.txt`);
@@ -23,6 +24,7 @@ export function Chat() {
   const [selectedTopicNames, setSelectedTopicNames] = useState<string[]>([]);
   const [topicsContent, setTopicsContent] = useState<Record<string, string>>({});
   const [isLoadingContent, setIsLoadingContent] = useState(false);
+  const [isManagerOpen, setIsManagerOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
@@ -133,7 +135,7 @@ export function Chat() {
   };
 
   const handleOpenManager = () => {
-    alert('Gestión de materiales disponible en el asistente principal. Aquí puedes consultar y usar los temas.');
+    setIsManagerOpen(true);
   };
 
   const contextMaterials: ContextMaterial[] = useMemo(
@@ -265,7 +267,7 @@ export function Chat() {
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3">
               <ModelSelector selectedModel={selectedModel} onModelChange={setSelectedModel} />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                Usa el proxy del backend desplegado y añade contexto de tus temas del bucket.
+                Selecciona uno de los modelos de IA disponibles.
               </p>
             </div>
 
@@ -274,7 +276,7 @@ export function Chat() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">
-                      Contexto del bucket
+                      Contexto del Tema
                     </p>
                     <p className="text-xs text-indigo-800/80 dark:text-indigo-200/80">
                       {isLoadingContent
@@ -333,7 +335,7 @@ export function Chat() {
                       ¡Hola! ¿En qué puedo ayudarte hoy?
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Selecciona uno o más temas del bucket y escribe tu mensaje para agregar ese contexto.
+                      Selecciona uno o más temas del Curso de CTA "una sola vez, es opcional" para poder ayudarte.
                     </p>
                   </div>
                 )}
@@ -374,6 +376,15 @@ export function Chat() {
           </div>
         </div>
       </div>
+      <MaterialsManager
+        open={isManagerOpen}
+        onClose={() => setIsManagerOpen(false)}
+        topics={topics}
+        topicsLoading={topicsLoading}
+        onRefresh={loadTopics}
+        onUpdated={loadTopics}
+        onDownload={handleDownloadTopic}
+      />
     </div>
   );
 }

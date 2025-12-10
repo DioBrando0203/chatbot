@@ -28,7 +28,7 @@ export function TopicsSidebar({
     <aside className="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-lg h-fit md:sticky md:top-4 lg:top-6 space-y-4 transition-colors">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">Temas del bucket</p>
+          <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">Temas del Curso CTA</p>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             Selecciona para dar contexto al chat. El contenido se carga al marcar.
           </p>
