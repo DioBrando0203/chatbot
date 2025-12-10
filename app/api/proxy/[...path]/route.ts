@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 // URL del backend (HTTP)
 const BACKEND_URL = 'http://136.116.238.134/api';
 
-const resolvePath = (request: NextRequest, params?: { path?: string[] }) => {
+type PathParams = { path?: string[] };
+
+const resolvePath = (request: NextRequest, params?: PathParams) => {
   const pathSegments = params?.path ?? [];
   const direct = pathSegments.join('/');
   if (direct) return direct;
@@ -14,11 +16,22 @@ const resolvePath = (request: NextRequest, params?: { path?: string[] }) => {
   return trimmed;
 };
 
+const unwrapParams = async (
+  maybeParams: PathParams | Promise<PathParams> | undefined
+): Promise<PathParams | undefined> => {
+  if (!maybeParams) return undefined;
+  try {
+    return await Promise.resolve(maybeParams);
+  } catch {
+    return undefined;
+  }
+};
+
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
+  context: { params: Promise<PathParams> } | { params?: PathParams }
 ) {
-  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const resolved = await unwrapParams('params' in context ? context.params : undefined);
   const path = resolvePath(request, resolved);
   const search = request.nextUrl.searchParams.toString();
 
@@ -58,9 +71,9 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
+  context: { params: Promise<PathParams> } | { params?: PathParams }
 ) {
-  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const resolved = await unwrapParams('params' in context ? context.params : undefined);
   const path = resolvePath(request, resolved);
   if (!path) {
     return NextResponse.json(
@@ -107,9 +120,9 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
+  context: { params: Promise<PathParams> } | { params?: PathParams }
 ) {
-  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const resolved = await unwrapParams('params' in context ? context.params : undefined);
   const path = resolvePath(request, resolved);
   if (!path) {
     return NextResponse.json(
@@ -152,9 +165,9 @@ export async function DELETE(
 
 export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ path?: string[] }> } | { params?: { path?: string[] } }
+  context: { params: Promise<PathParams> } | { params?: PathParams }
 ) {
-  const resolved = 'params' in context && context.params instanceof Promise ? await context.params : context.params;
+  const resolved = await unwrapParams('params' in context ? context.params : undefined);
   const path = resolvePath(request, resolved);
   if (!path) {
     return NextResponse.json(
