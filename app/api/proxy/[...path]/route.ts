@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// URL del backend (HTTP)
-const BACKEND_URL = 'http://136.116.238.134/api';
+// URL base del backend. Incluimos el prefijo /api de Laravel.
+// Se puede sobrescribir con BACKEND_URL o NEXT_PUBLIC_BACKEND_URL.
+const BACKEND_URL =
+  (process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL)?.replace(/\/$/, '') ||
+  'https://chatbotapi-668471553054.us-central1.run.app/api';
+
+const buildUrl = (path: string, search?: string) => {
+  const cleanPath = path.replace(/^\/+/, '');
+  const query = search ? `?${search}` : '';
+  return `${BACKEND_URL}/${cleanPath}${query}`.replace(/([^:]\/)\/+/g, '$1');
+};
 
 type PathParams = { path?: string[] };
 
@@ -42,7 +51,7 @@ export async function GET(
     );
   }
 
-  const url = `${BACKEND_URL}/${path}${search ? `?${search}` : ''}`.replace(/([^:]\/)\/+/g, '$1');
+  const url = buildUrl(path, search);
 
   try {
     const response = await fetch(url, {
@@ -81,7 +90,7 @@ export async function POST(
       { status: 400 }
     );
   }
-  const url = `${BACKEND_URL}/${path}`.replace(/([^:]\/)\/+/g, '$1');
+  const url = buildUrl(path);
 
   try {
     const contentType = request.headers.get('content-type') || '';
@@ -130,7 +139,7 @@ export async function DELETE(
       { status: 400 }
     );
   }
-  const url = `${BACKEND_URL}/${path}`.replace(/([^:]\/)\/+/g, '$1');
+  const url = buildUrl(path);
 
   try {
     const contentType = request.headers.get('content-type') || '';
@@ -175,7 +184,7 @@ export async function PUT(
       { status: 400 }
     );
   }
-  const url = `${BACKEND_URL}/${path}`.replace(/([^:]\/)\/+/g, '$1');
+  const url = buildUrl(path);
 
   try {
     const body = await request.text();
