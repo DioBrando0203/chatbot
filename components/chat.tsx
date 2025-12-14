@@ -318,8 +318,8 @@ export function Chat() {
               </div>
             )}
 
-            <div className="flex-1 min-h-0 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
-              <div className="h-full overflow-y-auto px-4 sm:px-6 py-6 flex flex-col gap-6 scroll-smooth">
+            <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm h-[calc(100vh-400px)] min-h-[400px] max-h-[600px]">
+              <div className="h-full overflow-y-auto px-4 sm:px-6 py-6 flex flex-col gap-6 scroll-smooth chat-messages-scroll">
                 {messages.length === 0 && (
                   <div className="text-center text-gray-500 dark:text-gray-400 mt-6 sm:mt-10">
                     <div className="flex justify-center mb-4">
